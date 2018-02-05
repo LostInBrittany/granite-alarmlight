@@ -1,6 +1,29 @@
-# \<granite-alarmlight\>
+[![Published on webcomponents.org](https://img.shields.io/badge/webcomponents.org-published-blue.svg)](https://www.webcomponents.org/element/LostInBrittany/granite-alarmlight)
 
-a green-amber-red status indicator
+# granite-alarmlight
+
+A green-amber-red status indicator custom element
+
+## Doc & demo
+
+[https://lostinbrittany.github.io/granite-alarmlight](https://lostinbrittany.github.io/granite-alarmlight)
+
+## Usage
+
+<!---
+```
+<custom-element-demo>
+  <template>
+    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
+    <link rel="import" href="granite-alarmlight.html">
+    <next-code-block></next-code-block>
+  </template>
+</custom-element-demo>
+```
+-->
+```html
+ <granite-alarmlight status="{{value}}"></granite-alarmlight>
+```
 
 ## Install the Polymer-CLI
 
