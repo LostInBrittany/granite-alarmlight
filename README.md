@@ -22,7 +22,14 @@ A green-amber-red status indicator custom element
 ```
 -->
 ```html
- <granite-alarmlight status="{{value}}"></granite-alarmlight>
+ <granite-alarmlight status="1"></granite-alarmlight>
+ <granite-alarmlight status="0"></granite-alarmlight>
+ <granite-alarmlight status="-1"></granite-alarmlight>
+ <granite-alarmlight status="1" linear></granite-alarmlight>
+ <granite-alarmlight status="0.75" linear></granite-alarmlight>
+ <granite-alarmlight status="0.5" linear></granite-alarmlight>
+ <granite-alarmlight status="0.25" linear></granite-alarmlight>
+ <granite-alarmlight status="0" linear></granite-alarmlight>
 ```
 
 ## Install the Polymer-CLI

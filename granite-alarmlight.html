@@ -28,19 +28,19 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
     /**
      * `granite-alarmlight`
      * a ok-warn-ko status indicator
-     * 
+     *
      * Example:
-     * 
+     *
      * ```html
      * <granite-alarmlight status="1"></granite-led>
      * ```
      * The following custom properties and mixins are available for styling:
      * Custom property | Description | Default
-     * 
+     *
      * ----------------|-------------|----------
      * `--granite-alarmlight-margin`                    | Margin around the LED           | 5px
      * `--granite-alarmlight-size`                      | Size of the LED                 | 20px
-     * 
+     *
      * @customElement
      * @polymer
      * @demo demo/index.html
@@ -101,21 +101,21 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
            */
           okColor: {
             type: String,
-            value: '#00ff00'
+            value: '#00ff00',
           },
           /**
            * The warn RGB Hex color
            */
           warnColor: {
             type: String,
-            value: '#ffff00'
+            value: '#ffff00',
           },
           /**
            * The ko RGB Hex color
            */
           koColor: {
             type: String,
-            value: '#ff0000'
+            value: '#ff0000',
           },
           /**
            * If true, log messages
@@ -126,21 +126,21 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
            },
           _okRGB: {
             type: Object,
-            computed: '_validateColor(okColor)'
+            computed: '_validateColor(okColor)',
           },
           _warnRGB: {
             type: Object,
-            computed: '_validateColor(warnColor)'
+            computed: '_validateColor(warnColor)',
           },
           _koRGB: {
             type: Object,
-            computed: '_validateColor(koColor)'
+            computed: '_validateColor(koColor)',
           },
           _statusRGB: {
             type: Object,
             observer: '_onStatusRGBChange',
             computed: '_onParamsChange(status,_okRGB,_warnRGB,_koRGB,linear)',
-          }
+          },
         };
       }
 
@@ -151,13 +151,13 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
 
       _validateColor(color) {
         if (!this._isValidHexValue(color)) {
-          return { r: 0, g:0, b:0 };
+          return {r: 0, g: 0, b: 0};
         }
         let colorLen = (color.length-1)/3;
         let rgb = {
-          r: parseInt(color.substring(1,1+colorLen),16),
-          g: parseInt(color.substring(1+colorLen,1+2*colorLen),16),
-          b: parseInt(color.substring(1+2*colorLen,1+3*colorLen),16),
+          r: parseInt(color.substring(1, 1+colorLen), 16),
+          g: parseInt(color.substring(1+colorLen, 1+2*colorLen), 16),
+          b: parseInt(color.substring(1+2*colorLen, 1+3*colorLen), 16),
         };
         if (this.debug) {
           console.log('[granite-alarmlight] _validateColor', color, rgb );
@@ -166,16 +166,16 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
       }
 
       _isValidHexValue(color) {
-        if (typeof color !== 'string' || 
-            !color.startsWith('#') || 
+        if (typeof color !== 'string' ||
+            !color.startsWith('#') ||
             ( color.length != 4 && color.length != 7) ) {
           return false;
         }
         if (this.debug) {
-          console.log('[granite-alarmlight] _isValidHexValue', parseInt(color.substring(1),16) );
+          console.log('[granite-alarmlight] _isValidHexValue', parseInt(color.substring(1), 16) );
         }
-        let hex = parseInt('f'+color.substring(1),16);
-        return (hex.toString(16) === 'f'+color.substring(1))
+        let hex = parseInt('f'+color.substring(1), 16);
+        return (hex.toString(16) === 'f'+color.substring(1));
       }
 
       _onParamsChange() {
@@ -183,7 +183,7 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
           return;
         }
         if (this.debug) {
-          console.log('[granite-alarmlight]', 
+          console.log('[granite-alarmlight]',
               `status: ${this.status}, _okRGB:${this._okRGB}, _warnRGB:${this._warnRGB}` );
         }
         if (this.koThreshold > this.warnThreshold ) {
@@ -197,7 +197,7 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
             return this._koRGB;
           }
           if (this.status > this.warnThreshold + (this.okThreshold - this.warnThreshold)/2.0) {
-            return this._okRGB
+            return this._okRGB;
           }
           return this._warnRGB;
         }
@@ -207,29 +207,31 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
             r: this._interpolate(this._warnRGB.r, this._okRGB.r, percent),
             g: this._interpolate(this._warnRGB.g, this._okRGB.g, percent),
             b: this._interpolate(this._warnRGB.b, this._okRGB.b, percent),
-          }
+          };
         } else {
           let percent = 1.0 * (this.status - this.koThreshold) / (this.warnThreshold - this.koThreshold);
           return {
             r: this._interpolate(this._koRGB.r, this._warnRGB.r, percent),
             g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
             b: this._interpolate(this._koRGB.b, this._warnRGB.b, percent),
-          }
+          };
         }
       }
 
       _rgbToHex(rgb) {
+        /* eslint-disable max-len */
         return `#${this._singleRgbToHex(this._statusRGB.r)}${this._singleRgbToHex(this._statusRGB.g)}${this._singleRgbToHex(this._statusRGB.b)}`;
+        /* eslint-enable max-len */
       }
 
       _singleRgbToHex(rgb) {
         let hex = Number(rgb).toString(16);
         if (hex.length < 2) {
-          hex = "0" + hex;
+          hex = '0' + hex;
         }
         return hex;
       }
-      
+    
       _onStatusRGBChange() {
         if (this.debug) {
           console.log('[granite-alarmlight] _onStatusRGBChange', this._statusRGB);
@@ -238,7 +240,7 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
         this.dispatchEvent(new CustomEvent('alarmlight-change', {detail: this._statusRGB}));
       }
       _interpolate(v1, v2, percent) {
-        return Math.round(v1 + percent*(v2-v1))
+        return Math.round(v1 + percent*(v2-v1));
       }
     }
 
