@@ -225,6 +225,12 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
       _computeLinearValue() {
         let percent;
         if (this._risingThreshold) {
+          if (this.status > this.ok) {
+            return this._okRGB;
+          }
+          if (this.status < this.ko) {
+            return this._koRGB;
+          }
           if (this.status > this.warn) {
             percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
             return {
@@ -239,6 +245,12 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
             g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
             b: this._interpolate(this._koRGB.b, this._warnRGB.b, percent),
           };
+        }
+        if (this.status < this.ok) {
+          return this._okRGB;
+        }
+        if (this.status > this.ko) {
+          return this._koRGB;
         }
         if (this.status < this.warn) {
           percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
