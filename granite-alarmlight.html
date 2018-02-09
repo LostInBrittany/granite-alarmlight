@@ -76,25 +76,29 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
            * The ok threshold
            * See the element description
            */
-          okThreshold: {
+          ok: {
             type: Number,
-            value: 1,
+            value: 1.0,
           },
           /**
            * The warn threshold
            * See the element description
            */
-          warnThreshold: {
+          warn: {
             type: Number,
-            value: 0,
+            value: 0.0,
           },
           /**
            * The ko threshold
            * See the element description
            */
-          koThreshold: {
+          ko: {
             type: Number,
-            value: -1,
+            value: -1.0,
+          },
+          _defaultThresholds: {
+            type: Array,
+            return: [-1.0,0.0,1.0],
           },
           /**
            * The ok RGB Hex color
@@ -144,9 +148,29 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
         };
       }
 
+     static get observers() {
+        return [
+          '_onThresholdsChanged(ok,warn,ko)',
+        ];
+      }
 
       connectedCallback() {
         super.connectedCallback();
+      }
+
+      _onThresholdsChanged() {
+        /*
+         * We need threshold values to be monotonous, either
+         * ok >= warn >= ko  or ok <= warn <= ko
+         */
+        if ( ((this.ok > this.warn) && (this.warn < this.ko)) ||
+              ((this.ok < this.warn) && (this.warn > this.ko)) ) {
+          console.error('[granite-alarmlight] _onThresholdsChanged - invalid thresholds ',
+            {ok: this.ok, warn: this.warn, ko: this.ko});
+          this.ko = this._defaultThresholds[0];
+          this.warn = this._defaultThresholds[1];
+          this.ok = this._defaultThresholds[2];
+        }
       }
 
       _validateColor(color) {
@@ -186,30 +210,24 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
           console.log('[granite-alarmlight]',
               `status: ${this.status}, _okRGB:${this._okRGB}, _warnRGB:${this._warnRGB}` );
         }
-        if (this.koThreshold > this.warnThreshold ) {
-          this.koThreshold = this.warnThreshold;
-        }
-        if (this.okThreshold < this.warnThreshold) {
-          this.okThreshold = this.warnThreshold;
-        }
         if (!this.linear) {
-          if (this.status < this.warnThreshold - (this.warnThreshold - this.koThreshold)/2.0) {
+          if (this.status < this.warn - (this.warn - this.ko)/2.0) {
             return this._koRGB;
           }
-          if (this.status > this.warnThreshold + (this.okThreshold - this.warnThreshold)/2.0) {
+          if (this.status > this.warn + (this.ok - this.warn)/2.0) {
             return this._okRGB;
           }
           return this._warnRGB;
         }
-        if (this.status > this.warnThreshold) {
-          let percent = 1.0 * (this.status - this.warnThreshold) / (this.okThreshold - this.warnThreshold);
+        if (this.status > this.warn) {
+          let percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
           return {
             r: this._interpolate(this._warnRGB.r, this._okRGB.r, percent),
             g: this._interpolate(this._warnRGB.g, this._okRGB.g, percent),
             b: this._interpolate(this._warnRGB.b, this._okRGB.b, percent),
           };
         } else {
-          let percent = 1.0 * (this.status - this.koThreshold) / (this.warnThreshold - this.koThreshold);
+          let percent = 1.0 * (this.status - this.ko) / (this.warn - this.ko);
           return {
             r: this._interpolate(this._koRGB.r, this._warnRGB.r, percent),
             g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
