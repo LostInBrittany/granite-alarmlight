@@ -30,6 +30,8 @@ A green-amber-red status indicator custom element
  <granite-alarmlight status="0.5" linear></granite-alarmlight>
  <granite-alarmlight status="0.25" linear></granite-alarmlight>
  <granite-alarmlight status="0" linear></granite-alarmlight>
+ <granite-alarmlight ok="-1.0" warn="0.0" ko="1.0" status="0.75" linear></granite-alarmlight>
+ <granite-alarmlight ok="-10.0" warn="0.0" ko="10.0" status="7.5" linear></granite-alarmlight>
 ```
 
 ## Install the Polymer-CLI

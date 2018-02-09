@@ -98,7 +98,7 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
           },
           _defaultThresholds: {
             type: Array,
-            return: [-1.0,0.0,1.0],
+            return: [-1.0, 0.0, 1.0],
           },
           /**
            * The ok RGB Hex color
@@ -145,17 +145,21 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
             observer: '_onStatusRGBChange',
             computed: '_onParamsChange(status,_okRGB,_warnRGB,_koRGB,linear)',
           },
+          _risingThreshold: {
+            type: Boolean,
+            computed: '_onThresholdsChanged(ok,warn,ko)',
+          },
         };
       }
 
      static get observers() {
-        return [
-          '_onThresholdsChanged(ok,warn,ko)',
-        ];
       }
 
       connectedCallback() {
         super.connectedCallback();
+        if (this.debug) {
+          console.log(`[granite-alarmlight] connectedCallback - Threshold values - ko:${this.ko}, warn:${this.warn},ok:${this.ok}`);
+        }
       }
 
       _onThresholdsChanged() {
@@ -170,7 +174,9 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
           this.ko = this._defaultThresholds[0];
           this.warn = this._defaultThresholds[1];
           this.ok = this._defaultThresholds[2];
+          return true;
         }
+        return ((this.ok >= this.warn) && (this.warn >= this.ko));
       }
 
       _validateColor(color) {
@@ -211,6 +217,47 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
               `status: ${this.status}, _okRGB:${this._okRGB}, _warnRGB:${this._warnRGB}` );
         }
         if (!this.linear) {
+          return this._computeValue();
+        }
+        return this._computeLinearValue();
+      }
+
+      _computeLinearValue() {
+        let percent;
+        if (this._risingThreshold) {
+          if (this.status > this.warn) {
+            percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
+            return {
+              r: this._interpolate(this._warnRGB.r, this._okRGB.r, percent),
+              g: this._interpolate(this._warnRGB.g, this._okRGB.g, percent),
+              b: this._interpolate(this._warnRGB.b, this._okRGB.b, percent),
+            };
+          }
+          percent = 1.0 * (this.status - this.ko) / (this.warn - this.ko);
+          return {
+            r: this._interpolate(this._koRGB.r, this._warnRGB.r, percent),
+            g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
+            b: this._interpolate(this._koRGB.b, this._warnRGB.b, percent),
+          };
+        }
+        if (this.status < this.warn) {
+          percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
+          return {
+            r: this._interpolate(this._warnRGB.r, this._okRGB.r, percent),
+            g: this._interpolate(this._warnRGB.g, this._okRGB.g, percent),
+            b: this._interpolate(this._warnRGB.b, this._okRGB.b, percent),
+          };
+        }
+        percent = 1.0 * (this.status - this.ko) / (this.warn - this.ko);
+        return {
+          r: this._interpolate(this._koRGB.r, this._warnRGB.r, percent),
+          g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
+          b: this._interpolate(this._koRGB.b, this._warnRGB.b, percent),
+        };
+      }
+
+      _computeValue() {
+        if (this._risingThreshold) {
           if (this.status < this.warn - (this.warn - this.ko)/2.0) {
             return this._koRGB;
           }
@@ -219,21 +266,13 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
           }
           return this._warnRGB;
         }
-        if (this.status > this.warn) {
-          let percent = 1.0 * (this.status - this.warn) / (this.ok - this.warn);
-          return {
-            r: this._interpolate(this._warnRGB.r, this._okRGB.r, percent),
-            g: this._interpolate(this._warnRGB.g, this._okRGB.g, percent),
-            b: this._interpolate(this._warnRGB.b, this._okRGB.b, percent),
-          };
-        } else {
-          let percent = 1.0 * (this.status - this.ko) / (this.warn - this.ko);
-          return {
-            r: this._interpolate(this._koRGB.r, this._warnRGB.r, percent),
-            g: this._interpolate(this._koRGB.g, this._warnRGB.g, percent),
-            b: this._interpolate(this._koRGB.b, this._warnRGB.b, percent),
-          };
+        if (this.status > this.warn + (this.ko - this.warn)/2.0) {
+          return this._koRGB;
         }
+        if (this.status < this.warn - (this.warn - this.ok)/2.0) {
+          return this._okRGB;
+        }
+        return this._warnRGB;
       }
 
       _rgbToHex(rgb) {
@@ -252,7 +291,7 @@ Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
     
       _onStatusRGBChange() {
         if (this.debug) {
-          console.log('[granite-alarmlight] _onStatusRGBChange', this._statusRGB);
+          console.log('[granite-alarmlight] _onStatusRGBChange', this._statusRGB, this._rgbToHex(this._statusRGB));
         }
         this.updateStyles({'--granite-alarmlight-current-color': this._rgbToHex(this._statusRGB)});
         this.dispatchEvent(new CustomEvent('alarmlight-change', {detail: this._statusRGB}));
