@@ -3,7 +3,6 @@
 Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
 */
 import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { updateStyles } from '@polymer/polymer/lib/mixins/element-mixin.js';
 import { html } from '@polymer/polymer/lib/utils/html-tag.js';
 /**
  * `granite-alarmlight`
@@ -309,7 +308,7 @@ class GraniteAlarmlight extends PolymerElement {
     if (this.debug) {
       console.log('[granite-alarmlight] _onStatusRGBChange', this._statusRGB, this._rgbToHex(this._statusRGB));
     }
-    updateStyles({'--granite-alarmlight-current-color': this._rgbToHex(this._statusRGB)});
+    this.updateStyles({'--granite-alarmlight-current-color': this._rgbToHex(this._statusRGB)});
     this.dispatchEvent(new CustomEvent('alarmlight-change', {detail: this._statusRGB}));
   }
   _interpolate(v1, v2, percent) {
