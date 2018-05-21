@@ -6,73 +6,107 @@
 
     <title>granite-alarmlight demo</title>
 
-    <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="../node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"></script>
 
-    <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
-    <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
-    <link rel="import" href="../granite-alarmlight.html">
+    <script type="module" src="../node_modules/@polymer/iron-demo-helpers/demo-pages-shared-styles.js"></script>
+    <script type="module" src="../node_modules/@polymer/iron-demo-helpers/demo-snippet.js"></script>
+    <script type="module" src="../granite-alarmlight.js"></script>
 
-    <custom-style>
+    <!-- FIXME(polymer-modulizer):
+        These imperative modules that innerHTML your HTML are
+        a hacky way to be sure that any mixins in included style
+        modules are ready before any elements that reference them are
+        instantiated, otherwise the CSS @apply mixin polyfill won't be
+        able to expand the underlying CSS custom properties.
+        See: https://github.com/Polymer/polymer-modulizer/issues/154
+        -->
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<custom-style>
       <style is="custom-style" include="demo-pages-shared-styles">
       </style>
-    </custom-style>
+    </custom-style>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
   </head>
   <body>
-    <div class="vertical-section-container centered">
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic granite-alarmlight demo in 3 states mode</h3>
       <demo-snippet>
         <template>
           <dom-bind id="demo1">
             <template>
-              <granite-alarmlight 
-                status="{{value}}" debug></granite-alarmlight>
-              <input type="range" min="-1" max="1"  step="0.1" value="{{value::input}}">
+              <granite-alarmlight status="{{value}}" debug=""></granite-alarmlight>
+              <input type="range" min="-1" max="1" step="0.1" value="{{value::input}}">
             </template>
           </dom-bind>
         </template>
       </demo-snippet>
-    </div>
-    <div class="vertical-section-container centered">
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic granite-alarmlight demo in linear mode</h3>
       <demo-snippet>
         <template>
           <dom-bind id="demo1">
             <template>
-              <granite-alarmlight 
-                status="{{value}}" linear debug></granite-alarmlight>
-              <input type="range" min="-1" max="1"  step="0.1" value="{{value::input}}">
+              <granite-alarmlight status="{{value}}" linear="" debug=""></granite-alarmlight>
+              <input type="range" min="-1" max="1" step="0.1" value="{{value::input}}">
             </template>
           </dom-bind>
         </template>
       </demo-snippet>
-    </div>
-    <div class="vertical-section-container centered">
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic granite-alarmlight demo in 3 states mode with ok &lt; warn &lt; ko</h3>
       <demo-snippet>
         <template>
           <dom-bind id="demo1">
             <template>
-              <granite-alarmlight  ok="-1.0" warn="0.0" ko="1.0"
-                status="{{value}}" debug></granite-alarmlight>
-              <input type="range" min="-1" max="1"  step="0.1" value="{{value::input}}">
+              <granite-alarmlight ok="-1.0" warn="0.0" ko="1.0" status="{{value}}" debug=""></granite-alarmlight>
+              <input type="range" min="-1" max="1" step="0.1" value="{{value::input}}">
             </template>
           </dom-bind>
         </template>
       </demo-snippet>
-    </div>
-    <div class="vertical-section-container centered">
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
+    <script type="module">
+const $_documentContainer = document.createElement('template');
+
+$_documentContainer.innerHTML = `<div class="vertical-section-container centered">
       <h3>Basic granite-alarmlight demo in linear mode with ok &lt; warn &lt; ko</h3>
       <demo-snippet>
         <template>
           <dom-bind id="demo1">
             <template>
-              <granite-alarmlight ok="-1.0" warn="0.0" ko="1.0"
-                status="{{value}}" linear debug></granite-alarmlight>
-              <input type="range" min="-1" max="1"  step="0.1" value="{{value::input}}">
+              <granite-alarmlight ok="-1.0" warn="0.0" ko="1.0" status="{{value}}" linear="" debug=""></granite-alarmlight>
+              <input type="range" min="-1" max="1" step="0.1" value="{{value::input}}">
             </template>
           </dom-bind>
         </template>
       </demo-snippet>
-    </div>
+    </div>`;
+
+document.body.appendChild($_documentContainer.content);
+</script>
   </body>
 </html>
