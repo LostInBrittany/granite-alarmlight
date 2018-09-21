@@ -309,7 +309,7 @@ class GraniteAlarmlight extends PolymerElement {
     if (this.debug) {
       console.log('[granite-alarmlight] _onStatusRGBChange', this._statusRGB, this._rgbToHex(this._statusRGB));
     }
-    updateStyles({'--granite-alarmlight-current-color': this._rgbToHex(this._statusRGB)});
+    this.updateStyles({'--granite-alarmlight-current-color': this._rgbToHex(this._statusRGB)});
     this.dispatchEvent(new CustomEvent('alarmlight-change', {detail: this._statusRGB}));
   }
   _interpolate(v1, v2, percent) {
