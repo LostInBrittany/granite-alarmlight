@@ -2,9 +2,8 @@
 @license MIT
 Copyright (c) 2018 Horacio "LostInBrittany" Gonzalez
 */
-import { PolymerElement } from '@polymer/polymer/polymer-element.js';
-import { html } from '@polymer/polymer/lib/utils/html-tag.js';
-import { updateStyles } from '@polymer/polymer/lib/mixins/element-mixin.js';
+import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
+
 /**
  * `granite-alarmlight`
  * a ok-warn-ko status indicator
