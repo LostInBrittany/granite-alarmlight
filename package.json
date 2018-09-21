@@ -2,7 +2,7 @@
   "description": "a green-amber-red status indicator",
   "name": "@granite-elements/granite-alarmlight",
   "license": "MIT",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "main": "granite-alarmlight.js",
   "homepage": "https://github.com/LostInBrittany/granite-alarmlight",
   "repository": {
@@ -10,11 +10,11 @@
     "url": "https://github.com/LostInBrittany/granite-alarmlight"
   },
   "dependencies": {
-    "@polymer/polymer": "^3.0.5"
+    "@polymer/polymer": "^3.0.0"
   },
   "devDependencies": {
-    "@polymer/iron-demo-helpers": "^3.0.2",
-    "@webcomponents/webcomponentsjs": "^2.1.3",
+    "@polymer/iron-demo-helpers": "^3.0.0",
+    "@webcomponents/webcomponentsjs": "^2.1.0",
     "wct-browser-legacy": "^0.0.1-pre.11"
   }
 }
