@@ -10,17 +10,6 @@ A green-amber-red status indicator custom element
 
 ## Usage
 
-<!---
-```
-<custom-element-demo>
-  <template>
-    <script src="../webcomponentsjs/webcomponents-lite.js"></script>
-    <link rel="import" href="granite-alarmlight.html">
-    <next-code-block></next-code-block>
-  </template>
-</custom-element-demo>
-```
--->
 ```html
  <granite-alarmlight status="1"></granite-alarmlight>
  <granite-alarmlight status="0"></granite-alarmlight>
