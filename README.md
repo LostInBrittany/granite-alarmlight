@@ -4,10 +4,6 @@
 
 A green-amber-red status indicator custom element
 
-## Doc & demo
-
-[https://lostinbrittany.github.io/granite-alarmlight](https://lostinbrittany.github.io/granite-alarmlight)
-
 ## Usage
 
 ```html
